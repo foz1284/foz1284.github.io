@@ -12,7 +12,7 @@
       <a-cursor></a-cursor>
     </a-scene>
     <script>
-      AFRAME.registerComponent('grabbable', {
+    AFRAME.registerComponent('grabbable', {
         init: function() {
           this.el.setAttribute('grip', 'objects: [box]');
           this.el.addEventListener('gripdown', function(evt) {
@@ -22,6 +22,21 @@
             evt.detail.object.removeAttribute('dynamic-body');
           });
         }
+      });
+      // Code to render the controllers
+      navigator.xr.requestSession('immersive-vr').then((session) => {
+        session.addEventListener('inputsourceschange', (event) => {
+          session.inputSources.forEach((inputSource) => {
+            if (inputSource.targetRayMode === 'gaze') {
+              // Code to render the gaze cursor
+            } else {
+              let controller = document.createElement('a-entity');
+              controller.setAttribute('id', inputSource.handedness);
+              controller.setAttribute('xr-controller', {inputSource: inputSource});
+              scene.appendChild(controller);
+            }
+          });
+        });
       });
     </script>
   </body>
