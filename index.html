@@ -1,43 +1,35 @@
 <html>
   <head>
     <script src="https://aframe.io/releases/1.0.4/aframe.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.117.1/build/three.min.js"></script>
+    <script>
+      // Function to generate a new block
+      function generateBlock() {
+        // Create a new A-Frame entity for the block
+        var block = document.createElement("a-box");
+        // Set the position of the block (random X and Z values)
+        block.setAttribute("position", (Math.random() * 5 - 2.5) + " 1.5 " + (Math.random() * -5));
+        // Set the color of the block
+        block.setAttribute("color", "#4CC3D9");
+        // Add the class "collidable" to the block
+        block.setAttribute("class", "collidable");
+        // Add the block to the scene
+        document.querySelector("a-scene").appendChild(block);
+        // Add collision detection to the block
+        block.addEventListener("collide", function(e) {
+          // Handle collision (e.g. end the game)
+          alert("Game Over!");
+        });
+      }
+      
+      // Generate a new block every second
+      setInterval(generateBlock, 1000);
+    </script>
   </head>
   <body>
     <a-scene>
-      <a-box position="0 0 -1" rotation="0 45 0" color="#4CC3D9" grabbable></a-box>
-      <a-sphere position="0 1.25 -5" radius="1.25" color="#EF2D5E"></a-sphere>
-      <a-cylinder position="1 0.75 -3" radius="0.5" height="1.5" color="#FFC65D"></a-cylinder>
-      <a-plane position="0 0 -4" rotation="-90 0 0" width="4" height="4" color="#7BC8A4"></a-plane>
+      <a-entity id="player" position="0 1.6 0" collision-detector="objects: .collidable"></a-entity>
       <a-sky color="#ECECEC"></a-sky>
-      <a-cursor></a-cursor>
     </a-scene>
-    <script>
-    AFRAME.registerComponent('grabbable', {
-        init: function() {
-          this.el.setAttribute('grip', 'objects: [box]');
-          this.el.addEventListener('gripdown', function(evt) {
-            evt.detail.object.setAttribute('dynamic-body', 'mass: 0');
-          });
-          this.el.addEventListener('gripup', function(evt) {
-            evt.detail.object.removeAttribute('dynamic-body');
-          });
-        }
-      });
-      // Code to render the controllers
-      navigator.xr.requestSession('immersive-vr').then((session) => {
-        session.addEventListener('inputsourceschange', (event) => {
-          session.inputSources.forEach((inputSource) => {
-            if (inputSource.targetRayMode === 'gaze') {
-              // Code to render the gaze cursor
-            } else {
-              let controller = document.createElement('a-entity');
-              controller.setAttribute('id', inputSource.handedness);
-              controller.setAttribute('xr-controller', {inputSource: inputSource});
-              scene.appendChild(controller);
-            }
-          });
-        });
-      });
-    </script>
   </body>
 </html>
