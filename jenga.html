@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Jenga WebXR</title>
+  </head>
+  <body>
+    <script>
+        navigator.xr.requestSession('immersive-vr').then((session) => {
+          session.requestReferenceSpace('local').then((referenceSpace) => {
+            // Create Jenga tower
+            const jengaTower = new XR.XrNode(session, referenceSpace);
+            // Create Jenga blocks
+            const jengaBlocks = [];
+            for (let i = 0; i < 54; i++) {
+              const jengaBlock = new XR.XrNode(session, referenceSpace);
+              jengaBlock.appendChild(jengaTower);
+              jengaBlocks.push(jengaBlock);
+            }
+            // Code to pick and place Jenga blocks
+            // ...
+          });
+        });
+    </script>
+  </body>
+</html>
